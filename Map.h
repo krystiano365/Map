@@ -21,31 +21,36 @@ class Map {
 			nextPair = nullptr;
 		}
 
+		Pair* clone(Pair* other){
+			Pair* p = new Pair(other->key, other->value);
+			return p;
+		}
+
 		~Pair() {
-			std::cout << "Destroying element with value: " << value << std::endl;
-			std::cout << "It was pointing to: " << nextPair << std::endl;
+//			std::cout << "Destroying element with value: " << value << std::endl;
+//			std::cout << "It was pointing to: " << nextPair << std::endl;
 		}
 	};
 
 private:
-	unsigned int length;
-	Pair *begin, current, end;
+	Pair *begin, *end;
 public:
 	Map();
 
+	Map(const Map &m);
+
 	~Map();
 
-	void advance();
-
-	val_t find(key_t key);
+	val_t* find(key_t key);
 
 	void add(key_t key, val_t value);
+
+
 };
 
 template<class key_t, class val_t>
 Map<key_t, val_t>::Map() {
-	begin = nullptr;
-	length = 0;
+	begin = end = nullptr;
 }
 
 template<class key_t, class val_t>
@@ -63,30 +68,76 @@ void Map<key_t, val_t>::add(key_t key, val_t value) {
 
 	Pair *p = new Pair(key, value);
 	if (begin == nullptr) {
-		begin = p;
+		begin = end = p;
 	} else {
-		Pair *temp = begin;
-		while (temp != nullptr) {
-			if (temp->nextPair == nullptr) {
-				temp->nextPair = p;
-				break;
-			}
+		end = end->nextPair = p;
+//		Pair *temp = begin;
+//		while (temp != nullptr) {
+//			if (temp->nextPair == nullptr) {
+//				temp->nextPair = p;
+//				break;
+//			}
+//			temp = temp->nextPair;
+//		}
+	}
+}
+
+template<class key_t, class val_t>
+val_t* Map<key_t, val_t>::find(key_t searchKey) {
+	Pair *temp = begin;
+	while(temp != nullptr){
+		if(temp->key == searchKey){
+			return &temp->value;
+		}
+		if(temp->nextPair != nullptr){
 			temp = temp->nextPair;
 		}
 	}
-	++length;
+	return nullptr;
+
 }
 
 template<class key_t, class val_t>
-val_t Map<key_t, val_t>::find(key_t searchKey) {
+Map<key_t, val_t>::Map(const Map &m) {
+	begin = end = nullptr;
+	Pair *src, **dst;
+	src = m.begin;
+	dst = &begin;
+	while (src) {
+		*dst = new Pair;
+		(*dst)->value = src->value;
+		(*dst)->key = src->key;
+		src = src->nextPair;
+		dst = &((*dst)->nextPair);
+	}
 
-	while()
+
+
+
+
+//	Pair *temp_outer = m.begin;
+//	Pair *temp = begin;
+//	while(temp_outer != nullptr){
+//		*temp = *temp_outer;
+//		temp = temp->nextPair;
+//
+//	}
+
 }
 
-template<class key_t, class val_t>
-void Map<key_t, val_t>::advance() {
+//template<class key_t, class val_t>
+//Map<key_t, val_t>::Map(const ) {
+//
+//	begin = end = nullptr;
+//
+//	Pair *temp = p->begin;
+//	while(temp != nullptr){
+//		this->add(temp->key, temp->value);
+//		if(temp->nextPair != nullptr) {
+//			temp = temp->nextPair;
+//		}
+//	}
+//}
 
-
-}
 
 #endif //MAP_MAP_H

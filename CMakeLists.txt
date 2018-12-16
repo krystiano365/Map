@@ -3,4 +3,4 @@ project(Map)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Map main.cpp Map.h)
+add_executable(Map main.cpp Map.h Test.h)
