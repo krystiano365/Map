@@ -5,10 +5,16 @@
 using namespace std;
 
 int main() {
-	Map<int, float> mama;
+	Map<int, float> m;
+	m.add(10, 10.5f);
+	m.add(9, 10.1f);
+	m.add(12, 10.31f);
+	m.add(15, 10.3f);
+
+
 //	typedef unsigned int ID; 											// Identification number of Employee
 //	Map<ID, Employee> database;											// Database of employees
-//
+
 //	database.add(761028073, Employee("Jan Kowalski", "salesman", 28)); 	// Add first employee: name: Jan Kowalski, position: salseman, age: 28,
 //	database.add(510212881, Employee("Adam Nowak", "storekeeper", 54));	// Add second employee: name: Adam Nowak, position: storekeeper, age: 54
 //	database.add(730505129, Employee("Anna Zaradna", "secretary", 32));	// Add third employee: name: Anna Zaradna, position: secretary, age: 32

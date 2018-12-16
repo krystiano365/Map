@@ -1,48 +1,92 @@
 //
-// Created by krystian on 15.12.18.
+// Hash Map implementation created by krystian on 15.12.18.
 //
 
 #ifndef MAP_MAP_H
 #define MAP_MAP_H
 
-#define SIZE 2
+#include <iostream>
 
-template<class key_t, class val_t> class Map{
-	struct Pair{
+template<class key_t, class val_t>
+class Map {
+
+	struct Pair {
 		key_t key;
 		val_t value;
 		Pair *nextPair;
-		Pair(key_t k, val_t v){
+
+		Pair(key_t k, val_t v) {
 			key = k;
 			value = v;
 			nextPair = nullptr;
 		}
-		~Pair()=default;
-	};
-private:
-	unsigned int elements, length;
-	Pair **array;
-public:
-	Map(){
-		array = new Pair*[1];
-		*array = nullptr;
-		elements = 0;
-		length = 1;
-	}
-	~Map(){
-		for(int i = 0; i < length; ++i){
-			Pair *curr = array[i];
-			while(curr != nullptr){
-				Pair *temp = curr->nextPair;
-				delete curr;
-				curr = temp;
-			}
+
+		~Pair() {
+			std::cout << "Destroying element with value: " << value << std::endl;
+			std::cout << "It was pointing to: " << nextPair << std::endl;
 		}
-		delete[]array;
-	}
-	void add();
+	};
+
+private:
+	unsigned int length;
+	Pair *begin, current, end;
+public:
+	Map();
+
+	~Map();
+
+	void advance();
+
+	val_t find(key_t key);
+
+	void add(key_t key, val_t value);
 };
 
+template<class key_t, class val_t>
+Map<key_t, val_t>::Map() {
+	begin = nullptr;
+	length = 0;
+}
 
+template<class key_t, class val_t>
+Map<key_t, val_t>::~Map() {
+
+	while (begin) {
+		Pair *temp = begin->nextPair;
+		delete begin;
+		begin = temp;
+	}
+}
+
+template<typename key_t, typename val_t>
+void Map<key_t, val_t>::add(key_t key, val_t value) {
+
+	Pair *p = new Pair(key, value);
+	if (begin == nullptr) {
+		begin = p;
+	} else {
+		Pair *temp = begin;
+		while (temp != nullptr) {
+			if (temp->nextPair == nullptr) {
+				temp->nextPair = p;
+				break;
+			}
+			temp = temp->nextPair;
+		}
+	}
+	++length;
+}
+
+template<class key_t, class val_t>
+val_t Map<key_t, val_t>::find(key_t searchKey) {
+
+	while()
+}
+
+template<class key_t, class val_t>
+void Map<key_t, val_t>::advance() {
+
+
+}
 
 #endif //MAP_MAP_H
