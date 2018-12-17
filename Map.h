@@ -134,7 +134,7 @@ bool Map<key_t, val_t>::checkExistance(key_t searchKey) {				//use when you need
 
 
 template<class key_t, class val_t>
-val_t* Map<key_t, val_t>::find(key_t searchKey) {						//use when you want the pointer to the object you want to find
+val_t* Map<key_t, val_t>::find(key_t searchKey) {						//use when you want the pointer to the value object you want to find
 	Pair *temp = begin;
 	while(temp != nullptr){
 		if(temp->key == searchKey){

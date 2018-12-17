@@ -19,9 +19,11 @@ public:
 	unsigned int howManyPages;
 	bool status;
 
-	Books() { }
+	Books() {}
 
-	Books(string a, string c, unsigned int p, bool s): author(a), category(c), howManyPages(p), status(s) {}
+	Books(string a, string c, unsigned int p, bool s) : author(a), category(c), howManyPages(p), status(s) {
+
+	}
 
 	void lendBook() {
 		if (status == inLibrary)
@@ -37,9 +39,9 @@ public:
 			cout << "Book already in the library!" << endl;
 	}
 
-	friend ostream & operator<<(ostream& out, const Books& book) {
+	friend ostream &operator<<(ostream &out, const Books &book) {
 		out << "Author: " << book.author << "\tCategory: " << book.category << "\tPages: " << book.howManyPages
-		<< "\tStatus: " << (book.status ? "available" : "not available");
+			<< "\tStatus: " << (book.status ? "available" : "not available");
 		return out;
 	}
 };
