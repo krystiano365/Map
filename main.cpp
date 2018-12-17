@@ -1,5 +1,6 @@
 #include "Map.h"														// Defines template Map<Key, Value>
 #include "Employee.h"													// Defines class Employee
+#include "Books.h"
 #include <iostream>
 
 
@@ -53,9 +54,37 @@ int main() {
 	} catch (NoSuchKeyException e){
 		cout << e.what() << endl;
 	}
-	newDatabase.add(3333333, Employee("Edek B", "debil", 33));
-	//database = newDatabase;												// Update original database (assignment operator called)
-	Map<ID, Employee> test = newDatabase;
-	cout << test << endl;
-	//cout << database << endl;											// Print original database
+
+	database = newDatabase;												// Update original database (assignment operator called)
+
+	cout << database << endl;											// Print original database
+
+
+
+
+	typedef string BookTitle;
+	Map<BookTitle, Books> library;
+	library.add("Pan Tadeusz", Books("Adam Mickiewicz", "epic poem", 308, true));
+	library.add("The Old Man And The Sea", Books("Ernest Hemingway", "novel", 127, false));
+	library.add("The Lord Of The Rings", Books("J.R.R. Tolkien", "fantasy", 1120, true));
+
+	cout << library << endl;
+
+	Books* bI;
+	if ( (bI = library.find("The Old Man And The Sea") ) ) {
+		bI->howManyPages = 759;
+		bI->lendBook();
+		bI->returnBook();
+	}
+
+	try {
+		if ((bI = library.find("Little Red Riding Hood"))) {
+			bI->lendBook();
+		}
+	} catch (NoSuchKeyException e){
+		cout<< e.what() <<endl;
+	}
+
+	cout << library << endl;
+
 };

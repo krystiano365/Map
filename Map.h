@@ -1,5 +1,5 @@
 //
-// Hash Map implementation created by krystian on 15.12.18.
+// Map implementation created by krystian on 15.12.18.
 //
 
 #ifndef MAP_MAP_H
@@ -36,7 +36,7 @@ public:
 	Map(const Map &m);
 	~Map();
 	val_t* find(key_t key);
-	val_t* find2(key_t key);
+	bool checkExistance(key_t key);
 	void add(key_t key, val_t value);
 	Map<key_t, val_t>& operator= (const Map& m);
 	friend ostream& operator<<(ostream& os, const Map &m){
@@ -48,6 +48,19 @@ public:
 		return os;
 	}
 };
+
+//class NoSuchKeyException : public exception {
+//	key_t k;
+//public:
+//	NoSuchKeyException(key_t key){
+//		k = key;
+//	}
+//	ostream& what() {
+//		ostream &msg = what();
+//		msg <<  "ERR: THIS MAP DOES NOT CONTAIN GIVEN KEY" << k;
+//		return msg;
+//	}
+//};
 
 class NoSuchKeyException : public exception {
 public:
@@ -95,7 +108,7 @@ Map<key_t, val_t>::~Map() {
 template<typename key_t, typename val_t>
 void Map<key_t, val_t>::add(key_t key, val_t value) {
 
-	if(find2(key) == nullptr){
+	if(checkExistance(key) == false){
 		Pair *p = new Pair(key, value);
 		if (begin == nullptr) {
 			begin = end = p;
@@ -108,20 +121,20 @@ void Map<key_t, val_t>::add(key_t key, val_t value) {
 }
 
 template<class key_t, class val_t>
-val_t* Map<key_t, val_t>::find2(key_t searchKey) {
+bool Map<key_t, val_t>::checkExistance(key_t searchKey) {				//use when you need a marker that the key exists
 	Pair *temp = begin;
 	while(temp != nullptr){
 		if(temp->key == searchKey){
-			return &temp->value;
+			return true;
 		}
 		temp = temp->nextPair;
 	}
-	return nullptr;
+	return false;
 }
 
 
 template<class key_t, class val_t>
-val_t* Map<key_t, val_t>::find(key_t searchKey) {
+val_t* Map<key_t, val_t>::find(key_t searchKey) {						//use when you want the pointer to the object you want to find
 	Pair *temp = begin;
 	while(temp != nullptr){
 		if(temp->key == searchKey){
@@ -134,6 +147,23 @@ val_t* Map<key_t, val_t>::find(key_t searchKey) {
 
 template<class key_t, class val_t>
 Map<key_t, val_t> &Map<key_t, val_t>::operator=(const Map &m) {
+	while (begin) {
+		Pair *temp = begin->nextPair;
+		delete begin;													//cleaning the Map
+		begin = temp;
+	}
+
+	begin = end = nullptr;												//refreshing properties of the Map
+
+	Pair *src, **dst;
+	src = m.begin;
+	dst = &begin;
+	while (src) {
+		*dst = new Pair(src->key, src->value);
+		src = src->nextPair;
+		end = *dst;
+		dst = &((*dst)->nextPair);
+	}
 
 }
 
