@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 template<class key_t, class val_t>
 class Map {
 
@@ -19,11 +21,6 @@ class Map {
 			key = k;
 			value = v;
 			nextPair = nullptr;
-		}
-
-		Pair* clone(Pair* other){
-			Pair* p = new Pair(other->key, other->value);
-			return p;
 		}
 
 		~Pair() {
@@ -42,15 +39,50 @@ public:
 	~Map();
 
 	val_t* find(key_t key);
+	val_t* find2(key_t key);
 
 	void add(key_t key, val_t value);
 
+	friend ostream& operator<<(ostream& os, const Map &m){
+		Pair *temp = m.begin;
+		while(temp != nullptr){
+			os << "(" << temp->key << " , " << temp->value << ")" << endl;
+			temp = temp->nextPair;
+		}
+		return os;
+	}
+};
 
+class NoSuchKeyException : public exception {
+public:
+	const char* what() const noexcept override {
+		return "ERR: THIS MAP DOES NOT CONTAIN GIVEN KEY";
+	}
+};
+
+class KeyAlreadyExistsException : public exception {
+public:
+	const char* what() const noexcept override {
+		return "ERR: THE FOLLOWING KEY ALREADY EXISTS AND CANNOT BE ADDED MORE THAN ONCE";
+	}
 };
 
 template<class key_t, class val_t>
 Map<key_t, val_t>::Map() {
 	begin = end = nullptr;
+}
+
+template<class key_t, class val_t>
+Map<key_t, val_t>::Map(const Map<key_t, val_t> &m) {
+	begin = end = nullptr;
+	Pair *src, **dst;
+	src = m.begin;
+	dst = &begin;
+	while (src) {
+		*dst = new Pair(src->key, src->value);
+		src = src->nextPair;
+		dst = &((*dst)->nextPair);
+	}
 }
 
 template<class key_t, class val_t>
@@ -66,11 +98,16 @@ Map<key_t, val_t>::~Map() {
 template<typename key_t, typename val_t>
 void Map<key_t, val_t>::add(key_t key, val_t value) {
 
-	Pair *p = new Pair(key, value);
-	if (begin == nullptr) {
-		begin = end = p;
+	if(find2(key) == nullptr){
+		Pair *p = new Pair(key, value);
+		if (begin == nullptr) {
+			begin = end = p;
+		} else {
+			end = end->nextPair = p;
+		}
 	} else {
-		end = end->nextPair = p;
+		throw KeyAlreadyExistsException();
+	}
 //		Pair *temp = begin;
 //		while (temp != nullptr) {
 //			if (temp->nextPair == nullptr) {
@@ -79,8 +116,21 @@ void Map<key_t, val_t>::add(key_t key, val_t value) {
 //			}
 //			temp = temp->nextPair;
 //		}
-	}
+
 }
+
+template<class key_t, class val_t>
+val_t* Map<key_t, val_t>::find2(key_t searchKey) {
+	Pair *temp = begin;
+	while(temp != nullptr){
+		if(temp->key == searchKey){
+			return &temp->value;
+		}
+		temp = temp->nextPair;
+	}
+	return nullptr;
+}
+
 
 template<class key_t, class val_t>
 val_t* Map<key_t, val_t>::find(key_t searchKey) {
@@ -89,41 +139,17 @@ val_t* Map<key_t, val_t>::find(key_t searchKey) {
 		if(temp->key == searchKey){
 			return &temp->value;
 		}
-		if(temp->nextPair != nullptr){
-			temp = temp->nextPair;
-		}
+		temp = temp->nextPair;
 	}
-	return nullptr;
-
+	throw NoSuchKeyException();
 }
 
-template<class key_t, class val_t>
-Map<key_t, val_t>::Map(const Map &m) {
-	begin = end = nullptr;
-	Pair *src, **dst;
-	src = m.begin;
-	dst = &begin;
-	while (src) {
-		*dst = new Pair;
-		(*dst)->value = src->value;
-		(*dst)->key = src->key;
-		src = src->nextPair;
-		dst = &((*dst)->nextPair);
-	}
 
 
 
 
 
-//	Pair *temp_outer = m.begin;
-//	Pair *temp = begin;
-//	while(temp_outer != nullptr){
-//		*temp = *temp_outer;
-//		temp = temp->nextPair;
-//
-//	}
 
-}
 
 //template<class key_t, class val_t>
 //Map<key_t, val_t>::Map(const ) {

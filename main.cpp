@@ -6,15 +6,27 @@
 using namespace std;
 
 int main() {
-	Map<int, float> m;
-	m.add(10, 10.5f);
-	m.add(9, 10.1f);
-	m.add(12, 10.31f);
-	m.add(15, 10.3f);
-	float *dupa;
-	dupa = m.find(12);
-	cout << *dupa<< endl;
-	Map<int, float> m2(m);
+//	Map<int, float> m;
+//	try{
+//		m.add(15, 9);
+//		m.add(10, 10.5f);
+//		m.add(9, 10.1f);
+//		m.add(12, 10.31f);
+//		m.add(15, 10.3f);
+//	}catch (exception &e){
+//		cout << e.what() << endl;
+//	}
+//	cout << m << endl;
+//
+//	float *dupa;
+//	dupa = m.find(12);
+//
+//	Map<int, float> m2(m);
+//	try{
+//		cout << *m.find(15) << endl;
+//	} catch (NoSuchKeyException &e){
+//		cout << e.what() << endl;
+//	}
 
 
 //	typedef unsigned int ID; 											// Identification number of Employee
